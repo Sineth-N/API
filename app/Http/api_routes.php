@@ -14,9 +14,29 @@ $api->version('v1', function ($api) {
 		return \App\User::all();
     }]);
 
-	// example of free route
+	// test route --ToDO Remove this route once in production
 	$api->get('free', function() {
 		return \App\User::all();
 	});
 
+	$api->group(['middleware' => 'api.auth'], function ($api) {
+		$api->get('books', 'App\Api\V1\Controllers\BookController@index');
+		$api->get('books/{id}', 'App\Api\V1\Controllers\BookController@show');
+		$api->post('books', 'App\Api\V1\Controllers\BookController@store');
+		$api->put('books/{id}', 'App\Api\V1\Controllers\BookController@update');
+		$api->delete('books/{id}', 'App\Api\V1\Controllers\BookController@destroy');
+		$api->get('getBooks/{limit}', 'App\Api\V1\Controllers\BookController@getAll');
+	});
+	$api->group(['middleware' => 'api.auth'], function ($api){
+		$api->get('movie/{id}', 'App\Api\V1\Controllers\MovieController@show');
+		$api->post('addMovie', 'App\Api\V1\Controllers\MovieController@addMovie');
+		$api->get('getAll/{limit}', 'App\Api\V1\Controllers\MovieController@getAll');
+
+		$api->get('torrent/{movieId}', 'App\Api\V1\Controllers\MovieController@getTorrent');
+
+		$api->post('comment', 'App\Api\V1\Controllers\commentController@store');
+		$api->get('comment/getAll/{movieId}','App\Api\V1\Controllers\commentController@getAll');
+		$api->delete('comment/{id}', 'App\Api\V1\Controllers\commentController@destroy');
+
+	});
 });

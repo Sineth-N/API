@@ -33,4 +33,13 @@ class User extends Authenticatable
     {
         $this->attributes['password'] = \Hash::make($value);
     }
+    public function books()
+    {
+        return $this->hasMany('App\Book');
+    }
+    public function comments()
+    {
+        return $this->hasMany('App\comment');
+    }
+
 }
